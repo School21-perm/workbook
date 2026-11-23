@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ИИ в ежедневных задачах НКО - рабочая тетрадь</title>
+<style>
+  :root{
+    --blue:#2A72F8; --violet:#A139E5; --bg:#EEF1FA; --card:#fff; 
+    --ink:#0B1020; --muted:#5B6472; --line:#DDE3F0; --tint:#EAF0FE; 
+    --vtint:#F3EAFD; --ok:#1E9E6A; --okt:#E3F5EC; --warn:#E08A00; 
+    --warnt:#FFF3DF; --bad:#D9534F; --badt:#FCE9E8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;font-size:16px;line-height:1.5}
+  .wrap{max-width:760px;margin:0 auto;padding:0 14px}
+  header{background:linear-gradient(180deg,#010712 0%,#0B1450 45%,#3B2A9E 80%,#B8A2F2 100%);color:#fff;padding:24px 0 22px}
+  .brand{display:flex;flex-direction:column;gap:2px;margin-bottom:10px}
+  .brand b{font-size:18px;font-weight:700;letter-spacing:.01em}
+  .brand span{font-size:13px;color:#DDE1FA;letter-spacing:.02em}
+  header h1{font-size:26px;line-height:1.2;margin:8px 0 8px;font-weight:700}
+  header p{margin:0;color:#DDE1FA;font-size:15px}
+  .pill{display:inline-block;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);padding:4px 10px;border-radius:999px;font-size:12px;color:#E7E9FF}
+  main{padding:16px 0 40px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0;box-shadow:0 2px 10px rgba(16,24,64,.04)}
+  h2{font-size:20px;margin:24px 0 6px;font-weight:700}
+  .eyebrow{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--violet);font-weight:700}
+  .intro{color:var(--muted);font-size:15px;margin:4px 0 10px}
+  label.f{display:block;font-size:14px;font-weight:600;margin:12px 0 5px}
+  textarea,input{width:100%;font:inherit;font-size:15px;background:#F6F8FD;border:1px solid var(--line);border-radius:10px;padding:10px 12px;outline:none}
+  textarea{min-height:80px;resize:vertical;line-height:1.45}
+  textarea:focus,input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(42,114,248,.15)}
+  .note{border-radius:12px;padding:10px 12px;margin:10px 0;font-size:14px}
+  .note.info{background:var(--tint)}
+  .note.warn{background:var(--warnt)}
+  .prompt-box{border:1px solid var(--line);border-radius:12px;background:#F6F8FD;overflow:hidden;margin:8px 0}
+  .prompt-top{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;border-bottom:1px solid var(--line);font-size:12px;color:var(--muted);gap:6px}
+  pre.prompt{margin:0;padding:12px;white-space:pre-wrap;word-wrap:break-word;font-family:inherit;font-size:14px;line-height:1.5;color:var(--ink)}
+  button{font:inherit;font-size:14px;font-weight:600;border-radius:10px;padding:9px 14px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink)}
+  button.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+  button.sm{padding:4px 8px;font-size:12px;border-radius:8px}
+  .btnrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .challenge{border:1px dashed var(--violet);background:var(--vtint);border-radius:12px;padding:10px 12px;margin-top:10px;font-size:14px}
+  .challenge b{color:var(--violet)}
+  .check-list label{display:flex;gap:10px;align-items:flex-start;padding:7px 0;font-size:15px;cursor:pointer}
+  .check-list input{width:18px;height:18px;margin-top:2px;flex:none;accent-color:var(--blue)}
+  .zones{display:grid;grid-template-columns:1fr;gap:10px;margin-top:10px}
+  .zone{border-radius:14px;padding:12px 14px;border:1px solid var(--line)}
+  .zone h4{margin:0 0 6px;font-size:15px}
+  .zone ul{margin:0;padding-left:18px;font-size:14px}
+  .zone.z1{background:var(--okt);border-color:rgba(30,158,106,.3)}
+  .zone.z1 h4{color:var(--ok)}
+  .zone.z2{background:var(--warnt);border-color:rgba(224,138,0,.3)}
+  .zone.z2 h4{color:var(--warn)}
+  .zone.z3{background:var(--badt);border-color:rgba(217,83,79,.3)}
+  .zone.z3 h4{color:var(--bad)}
+  .hint{display:none;border:1px solid var(--violet);border-radius:12px;padding:10px 14px;background:#FBF7FF;margin-top:10px}
+  .hint.open{display:block}
+  .unlock{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px}
+  .unlock small{color:var(--muted);font-size:13px}
+  .input-block{background:#F0F4FC;border-radius:12px;padding:12px;margin:10px 0;font-size:14px;border-left:4px solid var(--blue)}
+  .input-block b{display:block;margin-bottom:4px;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+  footer{color:var(--muted);font-size:13px;padding:10px 0 30px;text-align:center}
+  #toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(20px);background:#0B1020;color:#fff;padding:9px 16px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:.2s;z-index:99}
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .links{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .links a{display:block;text-decoration:none;color:var(--ink);background:#F6F8FD;border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:14px}
+  .links a b{display:block;font-size:14px}
+  .links a span{font-size:12px;color:var(--muted)}
+  @media (max-width:480px){.links{grid-template-columns:1fr}}
+  @media print{header,.btnrow,#toast,button{display:none!important}body{background:#fff}.card{box-shadow:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="brand">
+      <b>Школа 21</b>
+      <span>Кампус в Перми</span>
+    </div>
+    <span class="pill">XIV Пермский краевой форум общественности и добровольчества</span>
+    <h1>ИИ в ежедневных задачах НКО</h1>
+    <p>Мини-тетрадь. Всё готово для копирования: вводные, промпты и памятки. Подсказки откроются, когда вы попробуете сами.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="card">
+    <div class="eyebrow">База промптинга</div>
+    <h2 style="margin-top:4px">Как ставить задачу нейросети</h2>
+    <div class="intro">Промпт - это техническое задание для ИИ. Чем точнее вы опишете, что нужно, тем лучше результат.</div>
+    <div class="prompt-box" style="margin-top:10px">
+      <div class="prompt-top">Структура базового промпта <button class="sm" data-copy="#formula">Копировать</button></div>
+      <pre class="prompt" id="formula">1. РОЛЬ: Ты - [эксперт / менеджер по коммуникациям / координатор].
+2. ЗАДАЧА: Сделай [что именно].
+3. КОНТЕКСТ: Для [кого], ситуация [описание].
+4. ОГРАНИЧЕНИЯ: Не пиши [чего избегать], используй только [факты].
+5. ФОРМАТ: Ответ в виде [таблицы / списка / текста].</pre>
+    </div>
+    <div class="note info">
+      <b>Пример из практики (фандрайзинг):</b><br>
+      <i>«Ты опытный фандрайзер благотворительного фонда. Напиши текст для доноров о сборе средств на реабилитацию детей после операций. Нужно эмоционально, но без манипуляций. Ответ дай в формате: история одного подопечного + статистика + призыв к действию. Не более 300 слов, без клише «помочь может каждый».</i>
+    </div>
+    <div class="note warn">
+      <b>Три приема, которые работают:</b><br>
+      1. Попросите задать вам уточняющие вопросы, если нейросеть не поняла задачу.<br>
+      2. Попросите сначала предложить план, а потом - текст.<br>
+      3. Если результат плохой, не меняйте всё, а скажите: «Сделай короче» или «Добавь цифры».
+    </div>
+  </div>
+
+  <h2>Полезные сервисы</h2>
+  <div class="links">
+    <a href="https://giga.chat/" target="_blank" rel="noopener"><b>GigaChat</b><span>Текст, файлы, Kandinsky, аудио</span></a>
+    <a href="https://alice.yandex.ru/" target="_blank" rel="noopener"><b>Алиса</b><span>Поиск со ссылками, презентации</span></a>
+    <a href="https://www.perplexity.ai/" target="_blank" rel="noopener"><b>Perplexity</b><span>ИИ-поиск со ссылками</span></a>
+    <a href="https://chat.qwen.ai/" target="_blank" rel="noopener"><b>Qwen</b><span>Текст, таблицы, изображения</span></a>
+    <a href="https://gamma.app/" target="_blank" rel="noopener"><b>Gamma</b><span>Презентации из текста</span></a>
+    <a href="https://shedevrum.ai/" target="_blank" rel="noopener"><b>Шедеврум</b><span>Изображения и видео</span></a>
+  </div>
+  <p class="intro" style="margin-top:8px">Зарубежные сервисы (ChatGPT, Claude) - только с VPN и не для служебных данных.</p>
+
+  <h2>Памятка «3 зоны безопасности»</h2>
+  <div class="zones">
+    <div class="zone z1"><h4>Зелёная зона - можно</h4><ul>
+      <li>Черновики постов, анонсов, рассылок без персональных данных.</li>
+      <li>Общие вопросы, идеи, структура текста.</li>
+      <li>Разбор открытых документов и требований без чувствительных данных.</li>
+      <li>Презентации и картинки на основе общих описаний.</li>
+    </ul></div>
+    <div class="zone z2"><h4>Серая зона - с осторожностью</h4><ul>
+      <li>Внутренние документы - только с обезличиванием или в закрытом контуре.</li>
+      <li>Отчётность для грантодателей - без ФИО и контактов благополучателей.</li>
+      <li>Переписка с партнёрами - без коммерческой и личной информации.</li>
+      <li>Любые данные, где нужно сохранить конфиденциальность.</li>
+    </ul></div>
+    <div class="zone z3"><h4>Красная зона - нельзя</h4><ul>
+      <li>ФИО, адреса, телефоны, медицинские данные благополучателей.</li>
+      <li>Документы с персональными данными и чувствительной информацией.</li>
+      <li>Пароли, ключи доступа, внутренние реквизиты.</li>
+      <li>Всё, что нельзя показывать посторонним.</li>
+    </ul></div>
+  </div>
+
+  <!-- PRACTICE 1: Фонд помощи детям -->
+  <h2>Практика 1. Пост для соцсети</h2>
+  <p class="intro">Вы работаете в фонде помощи детям «Доброе начало». Фонд собирает деньги на реабилитацию ребенка. Нужен пост в соцсеть и местный чат.</p>
+  
+  <div class="input-block">
+    <b>Вводные данные для копирования в нейросеть</b>
+    Организация: Фонд «Доброе начало». Подопечный: Миша, 7 лет. Диагноз: ДЦП, нужен курс реабилитации. Сумма: 150 000 рублей. Тон: тёплый, без слова «жалость», без обещаний, что он точно встанет на ноги. Ссылка на сбор будет в конце.
+  </div>
+
+  <label class="f">Мой промпт (напишите, как попросите ИИ)</label>
+  <textarea data-f="p1-own" placeholder="Например: Ты - менеджер по коммуникациям фонда. Напиши пост..."></textarea>
+  <label class="f">Что получилось (вставьте ответ из нейросети)</label>
+  <textarea data-f="p1-res" placeholder="Скопируйте сюда ответ из GigaChat или Алисы"></textarea>
+  
+  <div class="unlock"><button class="btn" id="btn-p1" disabled>Показать подсказку</button><small>Откроется после заполнения промпта и ответа</small></div>
+  <div class="hint" id="hint-p1">
+    <div class="prompt-box">
+      <div class="prompt-top">Подсказка: как сделать хорошо <button class="sm" data-copy="#h1">Копировать</button></div>
+      <pre class="prompt" id="h1">Ты - менеджер по коммуникациям фонда «Доброе начало». Напиши пост для соцсети о сборе на реабилитацию для Миши, 7 лет (ДЦП).
+Нужно собрать 150 000 рублей. Тон: тёплый, без давления и без слова «жалость». Не обещай, что он точно поправится.
+Формат: 3 абзаца, в конце призыв и ссылка на сбор.
+Перед публикацией я проверю все факты и ссылки.</pre>
+    </div>
+    <div class="challenge"><b>Вызов.</b> Попросите нейросеть дать два варианта: короткий для чата и чуть длиннее для соцсети.</div>
+  </div>
+
+  <!-- PRACTICE 2: Приют для животных -->
+  <h2>Практика 2. База ответов для благополучателей</h2>
+  <p class="intro">Вы работаете в приюте для животных «Верный друг». В соцсетях и на сайте приходит много одинаковых вопросов. Нужно собрать памятку для волонтеров, чтобы они отвечали быстро и одинаково.</p>
+  
+  <div class="input-block">
+    <b>Вводные данные для копирования в нейросеть</b>
+    Вопрос 1: Как взять собаку из приюта? Вопрос 2: Можно ли привезти корм и где его оставить? Вопрос 3: Нужна ли помощь с выгулом и как записаться? Вопрос 4: Делаете ли вы прививки и стерилизацию?
+  </div>
+
+  <label class="f">Мой промпт (напишите, как попросите ИИ)</label>
+  <textarea data-f="p2-own" placeholder="Например: Ты - координатор приюта..."></textarea>
+  <label class="f">Что получилось (вставьте ответ из нейросети)</label>
+  <textarea data-f="p2-res" placeholder="Скопируйте сюда ответ из GigaChat или Алисы"></textarea>
+  
+  <div class="unlock"><button class="btn" id="btn-p2" disabled>Показать подсказку</button><small>Откроется после заполнения промпта и ответа</small></div>
+  <div class="hint" id="hint-p2">
+    <div class="prompt-box">
+      <div class="prompt-top">Подсказка: как сделать хорошо <button class="sm" data-copy="#h2">Копировать</button></div>
+      <pre class="prompt" id="h2">Ты - координатор приюта «Верный друг». Вот 4 реальных вопроса от волонтеров и гостей: [текст вопросов].
+Собери частые темы, предложи структуру памятки для волонтеров и черновики ответов.
+Тон уважительный, простой язык, без канцелярита.
+Правила приюта я подставлю сам. Отметь места, где нужны проверенные данные (например, режим работы).</pre>
+    </div>
+    <div class="challenge"><b>Вызов.</b> Попросите нейросеть сделать из ответов короткую памятку на один экран телефона.</div>
+  </div>
+
+  <!-- PRACTICE 3: Сложный грант -->
+  <h2>Практика 3. Разбор требований грантодателя и анализ рисков</h2>
+  <p class="intro">Вы работаете в экологическом движении «Чистый лес». Вы подаете заявку на грант в фонд «Экология будущего». У вас есть 15 страниц требований. Нужно не просто выписать их, а понять, какие данные в заявке могут вызвать вопросы у экспертов фонда и как их закрыть.</p>
+  
+  <div class="input-block">
+    <b>Вводные данные для копирования в нейросеть</b>
+    Требования фонда «Экология будущего»: 1) Заявка не более 10 страниц. 2) Бюджет с обоснованием каждой статьи. 3) Письма поддержки от партнёров (минимум 2). 4) Календарный план на 6 месяцев. 5) Критерии оценки: актуальность, реалистичность, устойчивость. 6) Обязательно описать целевую аудиторию (не менее 100 человек). 7) Приложить устав организации. 8) Описать, как проект будет жить после окончания гранта. Наша организация: Экологическое движение «Чистый лес». У нас есть устав, 2 партнёра, 50 постоянных волонтеров. Нет опыта написания грантов на сумму более 500 000 рублей.
+  </div>
+
+  <label class="f">Мой промпт (напишите, как попросите ИИ)</label>
+  <textarea data-f="p3-own" placeholder="Например: Ты - грантрайтер. Вот текст требований и данные о нас..."></textarea>
+  <label class="f">Что получилось (вставьте ответ из нейросети)</label>
+  <textarea data-f="p3-res" placeholder="Скопируйте сюда ответ из GigaChat или Алисы"></textarea>
+  
+  <div class="unlock"><button class="btn" id="btn-p3" disabled>Показать подсказку</button><small>Откроется после заполнения промпта и ответа</small></div>
+  <div class="hint" id="hint-p3">
+    <div class="prompt-box">
+      <div class="prompt-top">Подсказка: как сделать хорошо <button class="sm" data-copy="#h3">Копировать</button></div>
+      <pre class="prompt" id="h3">Ты - грантрайтер. Вот текст требований фонда «Экология будущего»: [вставить сюда текст требований].
+А вот данные о нашей организации: [вставить сюда данные о нас из блока "Вводные данные"].
+Составь таблицу: требование / что нужно предоставить / есть ли у нас / чего не хватает.
+Выдели 3 самых критичных риска для нашей заявки (например, слабая устойчивость после гранта или отсутствие опыта крупных грантов). Не придумывай данные, если их нет в запросе, пиши «требуется уточнить».</pre>
+    </div>
+    <div class="challenge"><b>Вызов.</b> Попросите нейросеть сделать из таблицы короткий чек-лист на одну страницу для команды с пометкой "Срочно" для критичных пунктов.</div>
+  </div>
+
+  <h2>Чек-лист безопасности</h2>
+  <div class="card check-list">
+    <label><input type="checkbox"> Не загружаю в публичные нейросети ФИО, адреса, телефоны, медицинские данные благополучателей.</label>
+    <label><input type="checkbox"> Внутренние документы и переписку с грантодателями - только в закрытом контуре или с обезличиванием.</label>
+    <label><input type="checkbox"> Проверяю все факты, цифры, имена и ссылки: ИИ может уверенно выдумать.</label>
+    <label><input type="checkbox"> Помню, что в облачном сервисе разработчик видит мои запросы.</label>
+    <label><input type="checkbox"> Итоговое решение и подпись остаются за человеком, не за нейросетью.</label>
+  </div>
+
+  <h2>Мой шаг на 2 недели</h2>
+  <div class="card">
+    <label class="f">Что попробую</label>
+    <input data-f="step-what" placeholder="Например: собрать базу ответов на 5 частых вопросов">
+    <label class="f">Какой инструмент</label>
+    <input data-f="step-tool" placeholder="GigaChat или Алиса">
+    <label class="f">К какому сроку</label>
+    <input data-f="step-date" placeholder="до 8 декабря">
+    <label class="f">Кто проверит результат</label>
+    <input data-f="step-who" placeholder="коллега или руководитель">
+  </div>
+
+  <div class="btnrow">
+    <button class="primary" id="exportDoc">Скачать в Word</button>
+    <button id="exportPdf">PDF</button>
+    <button id="copyAll">Скопировать всё</button>
+    <button id="reset">Очистить</button>
+  </div>
+
+  <footer>
+    Кампус «Школы 21» в Перми. XIV Пермский краевой форум общественности и добровольчества. 2026 год.
+  </footer>
+</main>
+
+<div id="toast"></div>
+
+<script>
+(function(){
+  var KEY = 'nko_ai_wb_v9';
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e) { state = {}; }
+
+  function toast(msg){ var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(function(){t.classList.remove('show')},1600); }
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} }
+
+  function checkUnlock(id){
+    var own = (state[id+'-own']||'').trim().length > 0;
+    var res = (state[id+'-res']||'').trim().length > 0;
+    var btn = document.getElementById('btn-'+id);
+    if (btn) {
+      btn.disabled = !(own && res);
+      btn.style.opacity = (own && res) ? '1' : '.5';
+    }
+  }
+
+  document.querySelectorAll('[data-f]').forEach(function(el){
+    var k = el.getAttribute('data-f');
+    if (state[k]) el.value = state[k];
+    el.addEventListener('input', function(){ 
+      state[k] = el.value; save(); 
+      var id = k.split('-')[0]; 
+      checkUnlock(id);
+    });
+  });
+
+  document.getElementById('btn-p1').addEventListener('click', function(){
+    document.getElementById('hint-p1').classList.toggle('open');
+  });
+  document.getElementById('btn-p2').addEventListener('click', function(){
+    document.getElementById('hint-p2').classList.toggle('open');
+  });
+  document.getElementById('btn-p3').addEventListener('click', function(){
+    document.getElementById('hint-p3').classList.toggle('open');
+  });
+
+  checkUnlock('p1');
+  checkUnlock('p2');
+  checkUnlock('p3');
+
+  document.querySelectorAll('[data-copy]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var el = document.querySelector(btn.getAttribute('data-copy'));
+      var txt = el.innerText;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(txt).then(function(){ toast('Скопировано'); }, function(){ fallback(txt); });
+      } else { fallback(txt); }
+    });
+  });
+  function fallback(txt){
+    var ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); toast('Скопировано'); } catch(e) { toast('Не удалось скопировать'); }
+    document.body.removeChild(ta);
+  }
+
+  function buildText(){
+    var lines = [];
+    lines.push('ИИ в ежедневных задачах НКО - рабочая тетрадь');
+    lines.push('Кампус «Школы 21» в Перми. XIV Пермский краевой форум общественности и добровольчества.');
+    lines.push('');
+    lines.push('ПРАКТИКА 1. ПОСТ ДЛЯ СОЦСЕТИ');
+    lines.push('Вводные данные: Фонд «Доброе начало». Подопечный Миша, 7 лет. Диагноз: ДЦП. Нужен курс реабилитации. Сумма 150 000 рублей. Тон: тёплый, без слова «жалость».');
+    lines.push('Мой промпт: ' + (state['p1-own']||''));
+    lines.push('Результат: ' + (state['p1-res']||''));
+    lines.push('Подсказка эксперта: ' + document.getElementById('h1').innerText);
+    lines.push('');
+    lines.push('ПРАКТИКА 2. БАЗА ОТВЕТОВ');
+    lines.push('Вводные данные: Приют «Верный друг». Вопросы: как взять собаку, куда привезти корм, как записаться на выгул, делаете ли прививки.');
+    lines.push('Мой промпт: ' + (state['p2-own']||''));
+    lines.push('Результат: ' + (state['p2-res']||''));
+    lines.push('Подсказка эксперта: ' + document.getElementById('h2').innerText);
+    lines.push('');
+    lines.push('ПРАКТИКА 3. ТРЕБОВАНИЯ ГРАНТОДАТЕЛЯ');
+    lines.push('Вводные данные: Экодвижение «Чистый лес». Грант в фонд «Экология будущего». Есть устав, 2 партнёра, 50 волонтеров. Нет опыта в крупных грантах.');
+    lines.push('Мой промпт: ' + (state['p3-own']||''));
+    lines.push('Результат: ' + (state['p3-res']||''));
+    lines.push('Подсказка эксперта: ' + document.getElementById('h3').innerText);
+    lines.push('');
+    lines.push('МОЙ ШАГ НА 2 НЕДЕЛИ');
+    lines.push('Что попробую: ' + (state['step-what']||''));
+    lines.push('Инструмент: ' + (state['step-tool']||''));
+    lines.push('Срок: ' + (state['step-date']||''));
+    lines.push('Кто проверит: ' + (state['step-who']||''));
+    return lines.join('\n');
+  }
+
+  document.getElementById('exportDoc').addEventListener('click', function(){
+    var html = '<html><head><meta charset="utf-8"></head><body><pre style="font-family:Arial,sans-serif;font-size:12pt;white-space:pre-wrap">' + buildText().replace(/</g,'&lt;') + '</pre></body></html>';
+    var blob = new Blob(['\ufeff', html], {type:'application/msword'});
+    var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'ИИ_в_НКО_рабочая_тетрадь.doc'; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    toast('Файл Word скачан');
+  });
+
+  document.getElementById('exportPdf').addEventListener('click', function(){ window.print(); });
+  document.getElementById('copyAll').addEventListener('click', function(){ fallback(buildText()); });
+
+  document.getElementById('reset').addEventListener('click', function(){
+    if (!confirm('Очистить все записи в этой тетради?')) return;
+    state = {}; localStorage.removeItem(KEY);
+    document.querySelectorAll('[data-f]').forEach(function(el){ el.value=''; });
+    document.querySelectorAll('.check-list input[type=checkbox]').forEach(function(cb){ cb.checked=false; });
+    document.querySelectorAll('.hint').forEach(function(el){ el.classList.remove('open'); });
+    checkUnlock('p1'); checkUnlock('p2'); checkUnlock('p3');
+    toast('Очищено');
+  });
+})();
+</script>
+</body>
+</html>
