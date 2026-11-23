@@ -343,14 +343,14 @@
     lines.push('Кто проверит: ' + (state['step-who']||''));
     return lines.join('\n');
   }
-
+/*
   document.getElementById('exportDoc').addEventListener('click', function(){
     var html = '<html><head><meta charset="utf-8"></head><body><pre style="font-family:Arial,sans-serif;font-size:12pt;white-space:pre-wrap">' + buildText().replace(/</g,'&lt;') + '</pre></body></html>';
     var blob = new Blob(['\ufeff', html], {type:'application/msword'});
     var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'ИИ_в_НКО_рабочая_тетрадь.doc'; document.body.appendChild(a); a.click(); document.body.removeChild(a);
     toast('Файл Word скачан');
   });
-
+*/
   document.getElementById('exportPdf').addEventListener('click', function(){ window.print(); });
   document.getElementById('copyAll').addEventListener('click', function(){ fallback(buildText()); });
 
